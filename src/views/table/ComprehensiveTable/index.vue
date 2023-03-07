@@ -19,14 +19,6 @@
         </div>
       </template>
       <template v-slot:sex="scope">{{ scope.row.sex ? '男' : '女' }}</template>
-      <template v-slot:operation="scope">
-        <el-button type="primary" size="small" icon="Edit" @click="edit(scope.row)">
-          编辑
-        </el-button>
-        <el-button @click="del(scope.row)" type="danger" size="small" icon="Delete">
-          删除
-        </el-button>
-      </template>
     </PropTable>
 
     <el-dialog v-model="dialogVisible" :title="title" width="50%">
@@ -41,8 +33,8 @@
         <el-form-item label="姓名" prop="name">
           <el-input v-model="ruleForm.name" />
         </el-form-item>
-        <el-form-item label="年龄" prop="age">
-          <el-input v-model="ruleForm.age" />
+        <el-form-item label="年级" prop="grade">
+          <el-input v-model="ruleForm.grade" />
         </el-form-item>
         <el-form-item label="性别" prop="sex">
           <el-radio-group v-model="ruleForm.sex">
@@ -76,11 +68,30 @@
   const loading = ref(true)
   const appContainer = ref(null)
   import PropTable from '@/components/Table/PropTable/index.vue'
-  const data = []
+  import axios from 'axios'
+  const data = reactive([])
+  axios({
+    url: 'http://localhost:8080/student/get',
+    method: 'GET',
+  }).then((res) => {
+    for (let i = 0; i < res.data.length; i++) {
+      data.push({
+        name: res.data[i].name,
+        grade: res.data[i].grade,
+        sex: res.data[i].sex,
+        classroom: res.data[i].classroom,
+        stuid: res.data[i].id,
+        braceletid: res.data[i].bracelet_id,
+        state: '体测中',
+        physicaltime: res.data[i].physical_time,
+      })
+    }
+  })
   const column = [
     { type: 'selection', width: 60, fixed: 'left' },
     { name: 'name', label: '姓名', inSearch: true, valueType: 'input', width: 80 },
-    { name: 'age', label: '年龄', width: 80 },
+    { name: 'grade', label: '年级', width: 80 },
+    { name: 'classroom', label: '班级', width: 80 },
     {
       name: 'sex',
       label: '性别',
@@ -100,18 +111,18 @@
       valueType: 'select',
     },
     { name: 'stuid', label: '学号', inSearch: true, valueType: 'input', width: 100 },
-    { name: 'braceletid', label: '手环号', inSearch: true, width: 80 },
-    { name: 'state', label: '状态', inSearch: true, width: 80 },
-    { name: 'physicaltime', label: '体测时间', inSearch: true, width: 160 },
+    { name: 'braceletid', label: '手环号', width: 80 },
+    { name: 'state', label: '状态', width: 80 },
+    { name: 'physicaltime', label: '体测时间', width: 160 },
   ]
   const list = ref(data)
-
   const formSize = ref('default')
   const ruleFormRef = ref<FormInstance>()
   const ruleForm = reactive({
     name: '',
     sex: null,
-    age: null,
+    grade: null,
+    classroom: null,
     stuid: '',
     braceletid: '',
     state: '',
@@ -120,7 +131,7 @@
 
   const rules = reactive({
     name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-    age: [{ required: true, message: '请输入年龄', trigger: 'blur' }],
+    grade: [{ required: true, message: '请输入年级', trigger: 'blur' }],
     sex: [
       {
         required: true,
@@ -171,36 +182,6 @@
     selectObj.value = val
   }
 
-  const edit = (row) => {
-    title.value = '编辑'
-    rowObj.value = row
-    dialogVisible.value = true
-    ruleForm.name = row.name
-    ruleForm.sex = row.sex
-    ruleForm.age = row.age
-    ruleForm.braceletid = row.braceletid
-    ruleForm.stuid = row.stuid
-  }
-
-  const del = (row) => {
-    console.log('row==', row)
-    ElMessageBox.confirm('你确定要删除当前项吗?', '温馨提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-      draggable: true,
-    })
-      .then(() => {
-        list.value = list.value.filter((item) => item.id !== row.id)
-        ElMessage.success('删除成功')
-        loading.value = true
-        setTimeout(() => {
-          loading.value = false
-        }, 500)
-      })
-      .catch(() => {})
-  }
-
   const reset = () => {
     loading.value = true
     setTimeout(() => {
@@ -218,8 +199,10 @@
     }, 500)
   }
 
-  const getHeight = () => {}
-
+  // const getHeight = () => {}s
+  // onBeforeMount(() => {
+  //
+  // })
   onMounted(() => {
     nextTick(() => {
       // let data = appContainer.value.
@@ -231,9 +214,6 @@
 </script>
 
 <style scoped>
-  .edit-input {
-    padding-right: 100px;
-  }
   .app-container {
     flex: 1;
     display: flex;

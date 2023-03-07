@@ -14,12 +14,8 @@ interface extendRoute {
 import tableRouter from './modules/table'
 import echartsRouter from './modules/echarts'
 
-
 // 异步组件
-export const asyncRoutes = [
-  ...echartsRouter,
-  ...tableRouter,
-]
+export const asyncRoutes = [...tableRouter, ...echartsRouter]
 
 /**
  * path ==> 路由路径
