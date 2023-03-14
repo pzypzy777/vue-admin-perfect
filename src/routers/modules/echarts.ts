@@ -9,7 +9,7 @@ const echartsRouter = [
     children: [
       {
         path: '/echarts/simple',
-        component: () => import('@/views/echarts/simple/index.vue'),
+        component: () => import('@/views/echarts/index.vue'),
         name: 'echarts-simple',
         meta: { title: '学生状态', roles: ['other'], icon: 'MenuIcon' },
       },

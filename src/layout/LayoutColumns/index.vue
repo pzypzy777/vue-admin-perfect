@@ -26,7 +26,7 @@
 
     <div class="layout-columns-sub" :style="{ width: isCollapse ? '60px' : '210px' }">
       <div class="logo flex-center">
-        <span v-show="subMenus.length">{{ isCollapse ? "Vue" : "Vue Admin Perfect" }}</span>
+        <span v-show="subMenus.length">{{ isCollapse ? "Vue" : "体测监控系统" }}</span>
       </div>
       <el-scrollbar >
         <el-menu

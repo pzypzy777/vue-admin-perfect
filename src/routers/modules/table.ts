@@ -6,13 +6,10 @@ const tableRouter = [
   {
     path: '/table',
     component: Layout,
-    redirect: '/table/comprehensive',
-    name: 'table',
-
     children: [
       {
-        path: '/table/comprehensive',
-        component: () => import('@/views/table/ComprehensiveTable/index.vue'),
+        path: '/table',
+        component: () => import('@/views/table/index.vue'),
         name: 'comprehensive',
         meta: { title: '学生表格', keepAlive: true, icon: 'MenuIcon' },
       },
