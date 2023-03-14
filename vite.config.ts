@@ -72,7 +72,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       // 代理跨域（模拟示例）
       proxy: {
         '/api': {
-          target: 'http://localhost:8080/', // easymock
+          target: 'http://localhost:8080/',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
