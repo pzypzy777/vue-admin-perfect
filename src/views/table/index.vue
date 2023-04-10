@@ -82,7 +82,6 @@
         classroom: res.data[i].classroom,
         stuid: res.data[i].id,
         braceletid: res.data[i].bracelet_id,
-        state: '体测中',
         physicaltime: res.data[i].physical_time,
       })
     }
@@ -112,7 +111,6 @@
     },
     { name: 'stuid', label: '学号', inSearch: true, valueType: 'input', width: 100 },
     { name: 'braceletid', label: '手环号', width: 80 },
-    { name: 'state', label: '状态', width: 80 },
     { name: 'physicaltime', label: '体测时间', width: 160 },
   ]
   const list = ref(data)
@@ -124,9 +122,8 @@
     grade: null,
     classroom: null,
     stuid: '',
-    braceletid: '',
-    state: '',
-    physicaltime: '',
+    bracelet_id: '',
+    physical_time: '',
   })
 
   const rules = reactive({
