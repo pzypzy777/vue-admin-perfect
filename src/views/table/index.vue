@@ -90,7 +90,7 @@
     { type: 'selection', width: 60, fixed: 'left' },
     { name: 'name', label: '姓名', inSearch: true, valueType: 'input', width: 80 },
     { name: 'grade', label: '年级', width: 80 },
-    { name: 'classroom', label: '班级', width: 80 },
+    { name: 'classroom', label: '班级', width: 160 },
     {
       name: 'sex',
       label: '性别',
@@ -111,7 +111,7 @@
     },
     { name: 'stuid', label: '学号', inSearch: true, valueType: 'input', width: 100 },
     { name: 'braceletid', label: '手环号', width: 80 },
-    { name: 'physicaltime', label: '体测时间', width: 160 },
+    { name: 'physicaltime', label: '体测时间', width: 180 },
   ]
   const list = ref(data)
   const formSize = ref('default')
