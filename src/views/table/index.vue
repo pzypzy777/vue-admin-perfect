@@ -75,6 +75,12 @@
     method: 'GET',
   }).then((res) => {
     for (let i = 0; i < res.data.length; i++) {
+      let dateString = res.data[i].physical_time // 假设这是从后端接收到的日期字符串
+      let date = new Date(dateString)
+      let formattedDate = date
+        .toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', hour12: false })
+        .replace(/\//g, '-')
+        .replace(/[日上下午]/g, '')
       data.push({
         name: res.data[i].name,
         grade: res.data[i].grade,
@@ -82,7 +88,7 @@
         classroom: res.data[i].classroom,
         stuid: res.data[i].id,
         braceletid: res.data[i].bracelet_id,
-        physicaltime: res.data[i].physical_time,
+        physicaltime: formattedDate,
       })
     }
   })
