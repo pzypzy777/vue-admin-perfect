@@ -62,131 +62,14 @@
   </div>
 </template>
 <script lang="ts" setup name="comprehensive">
-import { ref, reactive, onMounted, nextTick } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import type { FormInstance } from 'element-plus'
-const loading = ref(true)
-const appContainer = ref(null)
-import PropTable from '@/components/Table/PropTable/index.vue'
-import axios from 'axios'
-const data = reactive([])
-axios({
-  url: 'http://localhost:8080/student/get',
-  method: 'GET',
-}).then((res) => {
-  for (let i = 0; i < res.data.length; i++) {
-    let dateString = res.data[i].physical_time // 假设这是从后端接收到的日期字符串
-    let date = new Date(dateString)
-    let formattedDate = date
-      .toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', hour12: false })
-      .replace(/\//g, '-')
-      .replace(/[日上下午]/g, '')
-    data.push({
-      name: res.data[i].name,
-      grade: res.data[i].grade,
-      sex: res.data[i].sex,
-      classroom: res.data[i].classroom,
-      stuid: res.data[i].id,
-      braceletid: res.data[i].bracelet_id,
-      physicaltime: formattedDate,
-    })
-  }
-})
-const column = [
-  { type: 'selection', width: 60, fixed: 'left' },
-  { name: 'name', label: '姓名', inSearch: true, valueType: 'input', width: 80 },
-  { name: 'grade', label: '年级', width: 80 },
-  { name: 'classroom', label: '班级', width: 160 },
-  {
-    name: 'sex',
-    label: '性别',
-    slot: true,
-    inSearch: true,
-    width: 80,
-    options: [
-      {
-        value: 1,
-        label: '男',
-      },
-      {
-        value: 0,
-        label: '女',
-      },
-    ],
-    valueType: 'select',
-  },
-  { name: 'stuid', label: '学号', inSearch: true, valueType: 'input', width: 100 },
-  { name: 'braceletid', label: '手环号', width: 80 },
-  { name: 'physicaltime', label: '体测时间', width: 180 },
-]
-const list = ref(data)
-const formSize = ref('default')
-const ruleFormRef = ref<FormInstance>()
-const ruleForm = reactive({
-  name: '',
-  sex: null,
-  grade: null,
-  classroom: null,
-  stuid: '',
-  bracelet_id: '',
-  physical_time: '',
-})
-
-const rules = reactive({
-  name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-  grade: [{ required: true, message: '请输入年级', trigger: 'blur' }],
-  sex: [
-    {
-      required: true,
-      message: '请选择性别',
-      trigger: 'change',
-    },
-  ],
-  stuid: [{ required: true, message: '请输入学号', trigger: 'blur' }],
-})
-
-const dialogVisible = ref(false)
-const title = ref('新增')
-const rowObj = ref({})
-const selectObj = ref([])
-
-const handleClose = async (done: () => void) => {
-  await ruleFormRef.value.validate((valid, fields) => {
-    if (valid) {
-      //todo
-    } else {
-      console.log('error submit!', fields)
-    }
-  })
-}
-
-const add = () => {
-  title.value = '新增'
-  dialogVisible.value = true
-}
-
-const batchDelete = () => {
-  if (!selectObj.value.length) {
-    return ElMessage.error('未选中任何行')
-  }
-  ElMessageBox.confirm('你确定要删除选中项吗?', '温馨提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-    draggable: true,
-  })
-    .then(() => {
-      ElMessage.success('模拟删除成功') //todo 删除
-      list.value = list.value.concat([])
-    })
-    .catch(() => {})
-}
-const selectionChange = (val) => {
-  selectObj.value = val
-}
-
-const reset = () => {
-  data.length = 0
+  import { ref, reactive, onMounted, nextTick } from 'vue'
+  import { ElMessage, ElMessageBox } from 'element-plus'
+  import type { FormInstance } from 'element-plus'
+  const loading = ref(true)
+  const appContainer = ref(null)
+  import PropTable from '@/components/Table/PropTable/index.vue'
+  import axios from 'axios'
+  const data = reactive([])
   axios({
     url: 'http://localhost:8080/student/get',
     method: 'GET',
@@ -200,36 +83,114 @@ const reset = () => {
         .replace(/[日上下午]/g, '')
       data.push({
         name: res.data[i].name,
-        grade: res.data[i].grade,
+        grade: '大四',
         sex: res.data[i].sex,
-        classroom: res.data[i].classroom,
+        classroom: '计算机1902',
         stuid: res.data[i].id,
         braceletid: res.data[i].bracelet_id,
         physicaltime: formattedDate,
       })
     }
   })
-}
+  const column = [
+    { type: 'selection', width: 60, fixed: 'left' },
+    { name: 'name', label: '姓名', inSearch: true, valueType: 'input', width: 80 },
+    { name: 'grade', label: '年级', width: 80 },
+    { name: 'classroom', label: '班级', width: 160 },
+    {
+      name: 'sex',
+      label: '性别',
+      slot: true,
+      inSearch: true,
+      width: 80,
+      options: [
+        {
+          value: 1,
+          label: '男',
+        },
+        {
+          value: 0,
+          label: '女',
+        },
+      ],
+      valueType: 'select',
+    },
+    { name: 'stuid', label: '学号', inSearch: true, valueType: 'input', width: 100 },
+    { name: 'braceletid', label: '手环号', width: 80 },
+    { name: 'physicaltime', label: '体测时间', width: 180 },
+  ]
+  const list = ref(data)
+  const formSize = ref('default')
+  const ruleFormRef = ref<FormInstance>()
+  const ruleForm = reactive({
+    name: '',
+    sex: null,
+    grade: null,
+    classroom: null,
+    stuid: '',
+    bracelet_id: '',
+    physical_time: '',
+  })
 
-const onSubmit = (val) => {
-  let select = null
-  let apiname = null
-  if (val.name) {
-    select = val.name
-    apiname = 'name'
-  } else if (val.sex!=null) {
-    select = val.sex
-    apiname = 'sex'
-  } else if (val.stuid) {
-    select = val.stuid
-    apiname = 'id'
+  const rules = reactive({
+    name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+    grade: [{ required: true, message: '请输入年级', trigger: 'blur' }],
+    sex: [
+      {
+        required: true,
+        message: '请选择性别',
+        trigger: 'change',
+      },
+    ],
+    stuid: [{ required: true, message: '请输入学号', trigger: 'blur' }],
+  })
+
+  const dialogVisible = ref(false)
+  const title = ref('新增')
+  const rowObj = ref({})
+  const selectObj = ref([])
+
+  const handleClose = async (done: () => void) => {
+    await ruleFormRef.value.validate((valid, fields) => {
+      if (valid) {
+        //todo
+      } else {
+        console.log('error submit!', fields)
+      }
+    })
   }
-  if (select != null && apiname != null)
+
+  const add = () => {
+    title.value = '新增'
+    dialogVisible.value = true
+  }
+
+  const batchDelete = () => {
+    if (!selectObj.value.length) {
+      return ElMessage.error('未选中任何行')
+    }
+    ElMessageBox.confirm('你确定要删除选中项吗?', '温馨提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+      draggable: true,
+    })
+      .then(() => {
+        ElMessage.success('模拟删除成功') //todo 删除
+        list.value = list.value.concat([])
+      })
+      .catch(() => {})
+  }
+  const selectionChange = (val) => {
+    selectObj.value = val
+  }
+
+  const reset = () => {
+    data.length = 0
     axios({
-      url: 'http://localhost:8080/student/getby' + apiname + '?' + apiname + '=' + select,
+      url: 'http://localhost:8080/student/get',
       method: 'GET',
     }).then((res) => {
-      data.length = 0
       for (let i = 0; i < res.data.length; i++) {
         let dateString = res.data[i].physical_time // 假设这是从后端接收到的日期字符串
         let date = new Date(dateString)
@@ -239,43 +200,82 @@ const onSubmit = (val) => {
           .replace(/[日上下午]/g, '')
         data.push({
           name: res.data[i].name,
-          grade: res.data[i].grade,
+          grade: '大四',
           sex: res.data[i].sex,
-          classroom: res.data[i].classroom,
+          classroom: '计算机1902',
           stuid: res.data[i].id,
           braceletid: res.data[i].bracelet_id,
           physicaltime: formattedDate,
         })
       }
     })
-  console.log(data)
-}
+  }
 
-// const getHeight = () => {}s
-// onBeforeMount(() => {
-//
-// })
-onMounted(() => {
-  nextTick(() => {
-    // let data = appContainer.value.
+  const onSubmit = (val) => {
+    let select = null
+    let apiname = null
+    if (val.name) {
+      select = val.name
+      apiname = 'name'
+    } else if (val.sex != null) {
+      select = val.sex
+      apiname = 'sex'
+    } else if (val.stuid) {
+      select = val.stuid
+      apiname = 'id'
+    }
+    if (select != null && apiname != null)
+      axios({
+        url: 'http://localhost:8080/student/getby' + apiname + '?' + apiname + '=' + select,
+        method: 'GET',
+      }).then((res) => {
+        data.length = 0
+        for (let i = 0; i < res.data.length; i++) {
+          let dateString = res.data[i].physical_time // 假设这是从后端接收到的日期字符串
+          let date = new Date(dateString)
+          let formattedDate = date
+            .toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', hour12: false })
+            .replace(/\//g, '-')
+            .replace(/[日上下午]/g, '')
+          data.push({
+            name: res.data[i].name,
+            grade: '大四',
+            sex: res.data[i].sex,
+            classroom: '计算机1902',
+            stuid: res.data[i].id,
+            braceletid: res.data[i].bracelet_id,
+            physicaltime: formattedDate,
+          })
+        }
+      })
+    console.log(data)
+  }
+
+  // const getHeight = () => {}s
+  // onBeforeMount(() => {
+  //
+  // })
+  onMounted(() => {
+    nextTick(() => {
+      // let data = appContainer.value.
+    })
+    setTimeout(() => {
+      loading.value = false
+    }, 500)
   })
-  setTimeout(() => {
-    loading.value = false
-  }, 500)
-})
 </script>
 
 <style scoped>
-.app-container {
-  flex: 1;
-  display: flex;
-  width: 100%;
-  padding: 16px;
-  box-sizing: border-box;
-}
-.cancel-btn {
-  position: absolute;
-  right: 15px;
-  top: 10px;
-}
+  .app-container {
+    flex: 1;
+    display: flex;
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  .cancel-btn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+  }
 </style>
