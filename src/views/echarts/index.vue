@@ -1,7 +1,6 @@
 <template>
   <div id="ox" style="margin-left: 350px">血氧值={{ oxygenLevel }}</div>
-  <div id="chart" style="margin-left: -450px;width: 1000px; height: 600px"></div>
-
+  <div id="chart" style="margin-left: -450px; width: 1000px; height: 600px"></div>
 </template>
 
 <script lang="ts" setup>
