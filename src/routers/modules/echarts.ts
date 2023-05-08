@@ -4,14 +4,15 @@ import Layout from '@/layout/index.vue'
 
 const echartsRouter = [
   {
-    path: '/echarts',
+    path: '/echarts/:id',
     component: Layout,
     children: [
       {
-        path: '/echarts/simple',
+        path: '',
         component: () => import('@/views/echarts/index.vue'),
         name: 'echarts-simple',
         meta: { title: '学生状态', roles: ['other'], icon: 'MenuIcon' },
+        props: (route) => ({ id: route.params.id }),
       },
     ],
   },

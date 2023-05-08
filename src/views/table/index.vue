@@ -19,6 +19,11 @@
         </div>
       </template>
       <template v-slot:sex="scope">{{ scope.row.sex ? '男' : '女' }}</template>
+      <template v-slot:operation="scope">
+        <el-button type="primary" size="small" @click="checkinfo(scope.row.braceletid)">
+          查看体测状态
+        </el-button>
+      </template>
     </PropTable>
 
     <el-dialog v-model="dialogVisible" :title="title" width="50%">
@@ -64,6 +69,7 @@
 <script lang="ts" setup name="comprehensive">
   import { ref, reactive, onMounted, nextTick } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
+  import { useRouter } from 'vue-router'
   import type { FormInstance } from 'element-plus'
   const loading = ref(true)
   const appContainer = ref(null)
@@ -92,6 +98,7 @@
       })
     }
   })
+
   const column = [
     { type: 'selection', width: 60, fixed: 'left' },
     { name: 'name', label: '姓名', inSearch: true, valueType: 'input', width: 80 },
@@ -118,6 +125,7 @@
     { name: 'stuid', label: '学号', inSearch: true, valueType: 'input', width: 100 },
     { name: 'braceletid', label: '手环号', width: 80 },
     { name: 'physicaltime', label: '体测时间', width: 180 },
+    { name: 'operation', slot: true, fixed: 'right', width: 200, label: '操作' },
   ]
   const list = ref(data)
   const formSize = ref('default')
@@ -149,7 +157,13 @@
   const title = ref('新增')
   const rowObj = ref({})
   const selectObj = ref([])
-
+  const router = useRouter()
+  const checkinfo = (val) => {
+    router.push({
+      name: 'echarts-simple',
+      params: { id: val },
+    })
+  }
   const handleClose = async (done: () => void) => {
     await ruleFormRef.value.validate((valid, fields) => {
       if (valid) {
@@ -251,10 +265,7 @@
     console.log(data)
   }
 
-  // const getHeight = () => {}s
-  // onBeforeMount(() => {
-  //
-  // })
+
   onMounted(() => {
     nextTick(() => {
       // let data = appContainer.value.

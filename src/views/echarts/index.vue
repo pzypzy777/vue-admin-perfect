@@ -53,8 +53,9 @@
     chart.setOption(option)
     // 设置定时器，每秒更新一次数据
     setInterval(() => {
+      const id = window.location.href.match(/\d+$/)[0]
       axios({
-        url: 'http://localhost:8080/TestInfo/getbyid?id=1',
+        url: 'http://localhost:8080/TestInfo/getbyid?id=' + id,
         method: 'GET',
       }).then((res) => {
         const value = res.data.now_heart_rate
@@ -70,6 +71,7 @@
       option.xAxis.min = new Date(time.getTime() - maxLength * 1000)
       option.xAxis.max = time
       option.series[0].data = toRaw(data.value.map((item) => [item.time, item.value]))
+      // console.log(option)
       // 更新图表
       chart.setOption(option)
     }, 2000) // 设置定时器的时间间隔，单位为毫秒，这里设置为1秒更新一次数据
