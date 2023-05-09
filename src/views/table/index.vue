@@ -67,15 +67,18 @@
   </div>
 </template>
 <script lang="ts" setup name="comprehensive">
-  import { ref, reactive, onMounted, nextTick } from 'vue'
+  import { ref, reactive, onMounted, nextTick, toRaw } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { useRouter } from 'vue-router'
   import type { FormInstance } from 'element-plus'
+  import { ElNotification } from 'element-plus'
   const loading = ref(true)
   const appContainer = ref(null)
   import PropTable from '@/components/Table/PropTable/index.vue'
   import axios from 'axios'
   const data = reactive([])
+  // 定义方法
+
   axios({
     url: 'http://localhost:8080/student/get',
     method: 'GET',
@@ -136,8 +139,8 @@
     grade: null,
     classroom: null,
     stuid: '',
-    bracelet_id: '',
-    physical_time: '',
+    braceletid: '',
+    physicaltime: '',
   })
 
   const rules = reactive({
@@ -264,8 +267,6 @@
       })
     console.log(data)
   }
-
-
   onMounted(() => {
     nextTick(() => {
       // let data = appContainer.value.
@@ -273,6 +274,20 @@
     setTimeout(() => {
       loading.value = false
     }, 500)
+    setInterval(() => {
+      axios({
+        url: 'http://localhost:8080/TestInfo/checkState',
+        method: 'GET',
+      }).then((res) => {
+        if ((res.data == 1)) {
+          ElNotification({
+            title: 'Warning',
+            message: '学生潘振宇跌倒',
+            type: 'warning',
+          })
+        }
+      })
+    }, 1000) // 设置定时器的时间间隔，单位为毫秒，这里设置为1秒更新一次数据
   })
 </script>
 

@@ -1,6 +1,8 @@
 <template>
-  <div id="ox" style="margin-left: 350px">血氧值={{ oxygenLevel }}</div>
-  <div id="chart" style="margin-left: -450px; width: 1000px; height: 600px"></div>
+  <div id="ox" style="margin-left: 350px; font-size: 24px; font-weight: bold"
+    >血氧值={{ oxygenLevel }}</div
+  >
+  <div id="chart" style="margin-left: -450px; width: 1000px; height: 600px; margin-top: 50px"></div>
 </template>
 
 <script lang="ts" setup>
@@ -18,6 +20,10 @@
     const chart = init(document.getElementById('chart') as HTMLElement)
     chartRef.value = chart
     const option: EChartsOption = {
+      title: {
+        text: '心率变化图',
+        left: 'center',
+      },
       xAxis: {
         type: 'time', // 将轴类型设置为时间类型
         min: new Date(now.getTime() - 5000),
